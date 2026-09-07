@@ -1,59 +1,404 @@
-# Analytics_Engine
+# Data Warehouse & Analytics Engine
 
-A simple DBMS + EDA project on the Olist Brazilian E-Commerce dataset:
-clean the raw CSVs, load them into a relational SQLite database, run
-SQL business queries, explore with matplotlib, and view an interactive
-Streamlit dashboard.
+An end-to-end **data engineering and business intelligence project** built using the Brazilian Olist E-Commerce dataset.
 
-## Project structure
+The project demonstrates a complete analytics workflow:
+
+**Raw Data → ETL & Data Cleaning → Relational Data Warehouse → SQL Analytics → Interactive BI Dashboard**
+
+---
+
+## 📊 Project Overview
+
+This project transforms raw Brazilian e-commerce data into a structured analytical data warehouse and an interactive Streamlit dashboard.
+
+The system integrates information about:
+
+- Customers
+- Orders
+- Products
+- Sellers
+- Order items
+- Payments
+- Reviews
+- Product categories
+- Brazilian geography
+
+The final dashboard provides business insights into **sales performance, customer behavior, product performance, payments, reviews, sellers, and delivery operations**.
+
+---
+
+## 🏗️ Architecture
 
 ```text
-Analytics_Engine/
-├── README.md
+                    Olist Raw Dataset
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │    ETL      │
+                    │   etl.py    │
+                    └──────┬──────┘
+                           │
+                 Cleaning & Transformation
+                           │
+                           ▼
+                 ┌──────────────────┐
+                 │ SQLite Warehouse │
+                 │  warehouse.db    │
+                 └────────┬─────────┘
+                          │
+              ┌───────────┴───────────┐
+              ▼                       ▼
+       SQL Analytics              EDA / Plots
+      queries.sql                  eda.py
+              │
+              └───────────┬───────────┘
+                          ▼
+                 ┌─────────────────┐
+                 │ Streamlit BI    │
+                 │    Dashboard    │
+                 └─────────────────┘
+```
+
+---
+
+## 🚀 Key Features
+
+### 1. ETL Pipeline
+
+`etl.py` performs the data engineering workflow:
+
+- Loads raw CSV datasets
+- Performs data quality checks
+- Handles missing values
+- Removes duplicate review records
+- Converts date fields
+- Creates derived analytical fields
+- Builds the SQLite warehouse
+
+---
+
+### 2. Relational Data Warehouse
+
+The project uses **SQLite** as the analytical warehouse.
+
+The warehouse integrates multiple interconnected entities including:
+
+- Customers
+- Orders
+- Order Items
+- Products
+- Sellers
+- Payments
+- Reviews
+- Product Category Translation
+
+This structure enables relational SQL analysis across the e-commerce ecosystem.
+
+---
+
+### 3. SQL Analytics
+
+`queries.sql` contains analytical queries using:
+
+- `JOIN`
+- `GROUP BY`
+- Aggregations
+- Subqueries
+- Common Table Expressions (CTEs)
+- Window functions
+- Ranking
+- Time-based analysis
+
+The queries answer practical business questions around revenue, customers, products, sellers, payments, and reviews.
+
+---
+
+## 📈 Interactive Power BI-Style Dashboard
+
+The project includes two Streamlit dashboards:
+
+### `dashboard.py`
+
+The original interactive analytics dashboard.
+
+### `dashboard_powerbi.py`
+
+A more advanced **Power BI-style business intelligence dashboard** with:
+
+- Executive Overview
+- Sales & Products analysis
+- Customers & Operations analysis
+- KPI cards
+- Revenue trends
+- Order trends
+- Product category analysis
+- Payment analysis
+- Customer geography
+- Seller performance
+- Delivery performance
+- Review analysis
+- Interactive filters
+
+Available filters include:
+
+- Date range
+- Customer state
+- Product category
+- Order status
+- Payment type
+
+---
+
+## 📊 Dashboard Sections
+
+### Executive Overview
+
+Provides a high-level business summary including:
+
+- Total Revenue
+- Total Orders
+- Total Customers
+- Average Order Value
+- Average Review Score
+- Monthly Revenue
+- Monthly Orders
+- Order Status Distribution
+- Review Score Distribution
+- Delivery Success Rate
+
+### Sales & Products
+
+Analyzes:
+
+- Revenue by product category
+- Top 10 categories
+- Payment methods
+- Freight value
+- Units sold
+- Category-level performance
+
+### Customers & Operations
+
+Analyzes:
+
+- Unique customers
+- Repeat customers
+- Repeat purchase rate
+- Revenue by Brazilian state
+- Delivery performance
+- Average delivery time
+- Top sellers
+- Delivery vs customer satisfaction
+
+---
+
+## 🛠️ Technology Stack
+
+| Technology   | Purpose                        |
+| ------------ | ------------------------------ |
+| Python       | Core programming               |
+| Pandas       | Data processing                |
+| SQLite       | Data warehouse                 |
+| SQL          | Business analytics             |
+| Matplotlib   | Data visualization             |
+| Streamlit    | Interactive BI dashboard       |
+| Git & GitHub | Version control and deployment |
+
+---
+
+## 📁 Project Structure
+
+```text
+Data_Warehouse_Analytics_Engine/
+│
+├── dashboard.py
+├── dashboard_powerbi.py
+├── etl.py
+├── eda.py
+├── queries.sql
 ├── requirements.txt
+├── README.md
 ├── .gitignore
+│
 ├── data/
-│   └── raw/          put the 9 Olist CSVs here (not committed)
-├── etl.py             loads, cleans, and builds data/warehouse.db
-├── queries.sql          6 business-question SQL queries
-├── eda.py                 matplotlib charts, saved to plots/
-└── dashboard.py             interactive Streamlit dashboard
+│   ├── raw/
+│   │   └── Olist CSV datasets
+│   └── warehouse.db
+│
+└── plots/
+    ├── monthly_revenue.png
+    ├── top_categories.png
+    └── review_distribution.png
 ```
 
-## Database
+---
 
-7 tables: `customers`, `sellers`, `products`, `category_translation`,
-`orders`, `order_items`, `order_payments`, `order_reviews` — linked by
-foreign keys (customer → orders → order_items → products/sellers,
-orders → payments/reviews).
+## ⚙️ Local Installation
 
-## How to run
+### 1. Clone the repository
 
 ```bash
-pip install -r requirements.txt
-
-# 1. Put the 9 Olist CSVs in data/raw/
-python etl.py              # cleans the data, builds data/warehouse.db
-
-# 2. Explore
-python eda.py               # saves charts to plots/
-streamlit run dashboard.py   # interactive dashboard
+git clone https://github.com/YOUR_USERNAME/Data_Warehouse_Analytics_Engine.git
+cd Data_Warehouse_Analytics_Engine
 ```
 
-## A few real findings
+### 2. Create a virtual environment
 
-- Late-delivered orders average a **2.57** review score vs **4.29** for
-  on-time orders.
-- Only **3.0%** of customers placed more than one order.
-- `health_beauty`, `watches_gifts`, and `bed_bath_table` are the top 3
-  categories by revenue.
+Windows:
 
-## Push to GitHub
-
-```bash
-cd Analytics_Engine
-git remote add origin https://github.com/<your-username>/Analytics_Engine.git
-git push -u origin main
+```powershell
+python -m venv .venv
 ```
-(the repo is already git-initialized and committed — just create the
-empty repo on GitHub and run the two commands above)
+
+Activate it:
+
+```powershell
+.\.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+### 4. Add the Olist dataset
+
+Place the required CSV files inside:
+
+```text
+data/raw/
+```
+
+### 5. Build the warehouse
+
+```powershell
+python etl.py
+```
+
+This creates:
+
+```text
+data/warehouse.db
+```
+
+### 6. Launch the dashboard
+
+Original dashboard:
+
+```powershell
+python -m streamlit run dashboard.py
+```
+
+Power BI-style dashboard:
+
+```powershell
+python -m streamlit run dashboard_powerbi.py
+```
+
+---
+
+## 📦 Requirements
+
+The project uses:
+
+```text
+pandas
+matplotlib
+streamlit
+```
+
+See `requirements.txt` for the exact dependency specification.
+
+---
+
+## 🔍 Data Quality Checks
+
+During ETL, the pipeline checks for issues including:
+
+- Missing product categories
+- Duplicate review IDs
+- Missing delivery dates
+- Undelivered orders
+
+These checks are performed before the warehouse is constructed.
+
+---
+
+## 💡 Business Questions Answered
+
+The analytics engine can be used to investigate questions such as:
+
+- How is revenue changing over time?
+- Which product categories generate the most revenue?
+- Which states contribute the most sales?
+- Which payment methods are most commonly used?
+- Which sellers generate the most revenue?
+- How many customers make repeat purchases?
+- What is the average order value?
+- How long does delivery take?
+- How frequently are orders delivered late?
+- Does delivery performance relate to customer reviews?
+- Which categories have the strongest commercial performance?
+
+---
+
+## 🎯 Project Objective
+
+The objective is to demonstrate an end-to-end **data warehouse and analytics engineering workflow** rather than simply performing exploratory data analysis.
+
+The project combines:
+
+**Data Engineering + Relational Modeling + SQL Analytics + Business Intelligence**
+
+into a single deployable analytics application.
+
+---
+
+## 🌐 Deployment
+
+The Streamlit application is designed to be deployed using **Streamlit Community Cloud**.
+
+The production deployment will use:
+
+```text
+GitHub Repository
+        ↓
+Streamlit Community Cloud
+        ↓
+Interactive BI Dashboard
+```
+
+---
+
+## 📚 Dataset
+
+The project uses the **Brazilian Olist E-Commerce Dataset**, containing anonymized commercial information from orders placed on the Olist marketplace.
+
+The dataset is used for educational and analytical purposes.
+
+---
+
+## 👤 Author
+
+**Dhananjay Pratap Singh**
+
+Data Analytics | Data Engineering | Machine Learning
+
+---
+
+## ⭐ Project Highlights
+
+This project demonstrates practical experience with:
+
+- End-to-end ETL pipelines
+- Data cleaning and quality validation
+- Relational data warehousing
+- SQL-based analytics
+- Business intelligence
+- Interactive dashboards
+- Data visualization
+- Python data engineering
+- Streamlit deployment
+- Git/GitHub workflow

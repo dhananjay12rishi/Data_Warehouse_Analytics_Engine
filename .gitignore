@@ -1,5 +1,23 @@
-data/raw/*.csv
-data/warehouse.db
-__pycache__/
-*.pyc
+# Virtual environment
 .venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Raw Olist dataset
+data/raw/*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
